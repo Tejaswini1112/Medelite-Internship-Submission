@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #e5eeff;
+  color: #0b1c30;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tabular figures so metric columns align for comparison */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.report-canvas {
+  border: 1px solid #e2e8f0;
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  main {
+    margin-left: 0 !important;
+  }
+  .report-canvas {
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, #e5eaf3 25%, #f1f5fb 37%, #e5eaf3 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 8px;
+}
+
+/* Toast animation */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.toast-enter {
+  animation: toast-in 0.25s ease-out;
+}
