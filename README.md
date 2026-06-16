@@ -173,6 +173,9 @@ static build and the backend runs as **serverless functions** under `/api`:
 - `vercel.json` wires the build (`npm run build -w client` → `client/dist`) and per-function
   memory/duration. `PUPPETEER_SKIP_DOWNLOAD=true` is set on Vercel so the full Puppeteer
   Chromium isn't downloaded during the serverless build.
+- **PDF on Vercel (Fluid Compute):** set `AWS_LAMBDA_JS_RUNTIME=nodejs22.x` in the Vercel
+  project env so `@sparticuz/chromium` extracts `al2023` shared libraries and configures
+  `LD_LIBRARY_PATH` before launch. Do not override `LD_LIBRARY_PATH` in application code.
 - The repo is connected to Vercel, so pushes to `main` auto-deploy.
 
 Local development still runs the full Express server (`server/`) on `:4000` with the Vite

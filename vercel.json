@@ -4,8 +4,11 @@
   "outputDirectory": "client/dist",
   "installCommand": "npm install",
   "functions": {
-    "api/report/pdf.ts": { "memory": 1769, "maxDuration": 60 },
-    "api/report/docx.ts": { "memory": 1024, "maxDuration": 30 },
-    "api/facility/[ccn].ts": { "memory": 512, "maxDuration": 30 }
+    "api/report/pdf.ts": {
+      "maxDuration": 60,
+      "includeFiles": "node_modules/@sparticuz/chromium/**"
+    },
+    "api/report/docx.ts": { "maxDuration": 30 },
+    "api/facility/[ccn].ts": { "maxDuration": 30 }
   }
 }
