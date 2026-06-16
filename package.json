@@ -2,6 +2,7 @@
   "name": "medelite-facility-snapshot",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "INFINITE — Managed by MEDELITE | Facility Assessment Snapshot report generator (CMS Care Compare → branded PDF/Word exports).",
   "workspaces": [
     "server",

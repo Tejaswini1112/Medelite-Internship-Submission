@@ -1,16 +1,38 @@
-import puppeteer, { type Browser } from 'puppeteer';
+import type { Browser } from 'puppeteer-core';
 import type { ReportPayload } from '../types.js';
 import { renderReportHtml } from './template.js';
 
 let browserPromise: Promise<Browser> | null = null;
 
+const isServerless = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+
+/**
+ * Launch a headless browser. Locally we use the full `puppeteer` (bundled
+ * Chromium); on serverless (Vercel/Lambda) we use `puppeteer-core` with
+ * `@sparticuz/chromium`, which ships a Lambda-compatible Chromium binary.
+ */
+async function launch(): Promise<Browser> {
+  if (isServerless) {
+    const chromium = (await import('@sparticuz/chromium')).default;
+    const puppeteer = await import('puppeteer-core');
+    return puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: true,
+    }) as unknown as Browser;
+  }
+  const puppeteer = (await import('puppeteer')).default;
+  return puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  }) as unknown as Browser;
+}
+
 /** Reuse a single headless browser across requests for performance. */
 async function getBrowser(): Promise<Browser> {
   if (!browserPromise) {
-    browserPromise = puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    browserPromise = launch();
   }
   return browserPromise;
 }

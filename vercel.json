@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build -w client",
+  "outputDirectory": "client/dist",
+  "installCommand": "npm install",
+  "functions": {
+    "api/report/pdf.ts": { "memory": 1769, "maxDuration": 60 },
+    "api/report/docx.ts": { "memory": 1024, "maxDuration": 30 },
+    "api/facility/[ccn].ts": { "memory": 512, "maxDuration": 30 }
+  }
+}

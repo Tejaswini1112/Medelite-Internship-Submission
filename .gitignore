@@ -9,3 +9,4 @@ coverage/
 client/dist/
 server/dist/
 .cache/
+.vercel

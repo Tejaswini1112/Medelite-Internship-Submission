@@ -5,6 +5,9 @@ print-ready **Facility Assessment Snapshot**. It pulls live **CMS Care Compare**
 blends in **Medelite manual operational inputs**, renders a live WYSIWYG report canvas, and
 exports pixel-matched **PDF** and editable **Word (.docx)** reports.
 
+- **Live app:** https://medelite-facility-snapshot.vercel.app
+- **Repository:** https://github.com/Tejaswini1112/Medelite-Internship-Submission
+
 > **Sample test CCN:** `686123` (Kendall Lakes Healthcare and Rehab Center, FL)
 
 The UI implements the **"Clinical Minimalism / Report-First Canvas"** Stitch design
@@ -157,12 +160,23 @@ Open **http://localhost:5173**, enter `686123`, and download a PDF/Word report.
 
 ---
 
-## Deployment
+## Deployment (Vercel)
 
-- **Frontend:** build with `npm --workspace client run build` → deploy `client/dist` to Vercel/Netlify.
-- **Backend:** deploy `server/` to Render/Railway/AWS. Puppeteer needs a Chromium-capable image
-  (`--no-sandbox` flags are already set). Set `CORS_ORIGIN` to the deployed frontend URL.
-- A managed Redis can back the cache for multi-instance deployments.
+The app is deployed to **Vercel** as a single project — the React client is served as a
+static build and the backend runs as **serverless functions** under `/api`:
+
+- `api/health.ts`, `api/facility/[ccn].ts`, `api/report/pdf.ts`, `api/report/docx.ts`
+- These reuse the shared logic in `server/src` (CMS fetch, mapping, report template, docx).
+- **PDF on serverless:** `server/src/report/pdf.ts` is environment-aware — it uses full
+  `puppeteer` (bundled Chromium) locally and `puppeteer-core` + `@sparticuz/chromium`
+  (a Lambda-compatible Chromium) on Vercel.
+- `vercel.json` wires the build (`npm run build -w client` → `client/dist`) and per-function
+  memory/duration. `PUPPETEER_SKIP_DOWNLOAD=true` is set on Vercel so the full Puppeteer
+  Chromium isn't downloaded during the serverless build.
+- The repo is connected to Vercel, so pushes to `main` auto-deploy.
+
+Local development still runs the full Express server (`server/`) on `:4000` with the Vite
+dev proxy — no behavior change for `npm run dev`.
 
 ---
 
